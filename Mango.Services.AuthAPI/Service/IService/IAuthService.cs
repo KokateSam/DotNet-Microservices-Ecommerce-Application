@@ -1,0 +1,13 @@
+﻿using Mango.Services.AuthAPI.Models.Dto;
+
+namespace Mango.Services.AuthAPI.Service.IService
+{
+    public interface IAuthService
+    {
+        Task<string>Register(RegistrationRequestDto registrationRequestDto);
+        Task<LoginResponceDto>Login(LoginRequestDto loginRequestDto);
+        Task<bool>AssignRole(string Email,string roleName);
+        
+    }
+
+}

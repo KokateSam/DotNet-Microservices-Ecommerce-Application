@@ -1,0 +1,44 @@
+
+# Visual Studio temporary files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Angular / Node.js generated files
+node_modules/
+dist/
+.angular/
+coverage/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# SQL Server backup files
+*.bak
+*.trn
+
+# Keep database scripts tracked
+!DatabaseScripts/
+!DatabaseScripts/**/*.sql
