@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Mango.Services.EmailAPI.Models.Dto;
+using Mango.Services.EmailAPI.Services;
 using Microsoft.EntityFrameworkCore.Storage.Json;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,18 +10,21 @@ namespace Mango.Services.EmailAPI.Messaging
     public class AzureServiceBusConsumer:IAzureServiceBusConsumer
     {
         private readonly string serviceBusConnectionString;
-        private readonly string emaiCartQueue;
+        private readonly string emailCartQueue;
         private readonly IConfiguration _configuration;
         private ServiceBusProcessor _emailCartProcessor;
-        public AzureServiceBusConsumer(IConfiguration configuration)
+        private readonly EmailService _emailService;
+        public AzureServiceBusConsumer(IConfiguration configuration,EmailService emailService)
         { 
+            _emailService=emailService;
            _configuration = configuration;
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
-            emaiCartQueue = _configuration.GetValue<string>("TopicAndQueNames:EmailShoppingCartQueue");
+            emailCartQueue = _configuration.GetValue<string>("TopicAndQueNames:EmailShoppingCartQueue");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
 
-            _emailCartProcessor = client.CreateProcessor(emaiCartQueue);
+            _emailCartProcessor = client.CreateProcessor(emailCartQueue);
+
         }
         public async Task Start()
         {
@@ -52,7 +56,10 @@ namespace Mango.Services.EmailAPI.Messaging
             CartDto messegeObj=JsonConvert.DeserializeObject<CartDto>(body);
             try
             {
-                //will do it later-try to log email
+                //send and log email
+                await _emailService.EmailCartAndLog(messegeObj);
+
+                //here comlete the message delivery and message will be removed from Azure Queue
                 await args.CompleteMessageAsync(args.Message);
 
             }
