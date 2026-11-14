@@ -25,6 +25,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.MessageBus", "Mango.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.EmailAPI", "Mango.Services.EmailAPI\Mango.Services.EmailAPI.csproj", "{571558E1-E1FC-4959-B9A5-0B513B4E90BB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.OrderAPI", "Mango.Services.OrderAPI\Mango.Services.OrderAPI.csproj", "{17129268-9AE3-48A0-B7A9-F39C5448FA1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.RewardAPI", "Mango.Services.RewardAPI\Mango.Services.RewardAPI.csproj", "{3B6AF6C6-5B62-4429-BF35-7AD48E951E95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +68,14 @@ Global
 		{571558E1-E1FC-4959-B9A5-0B513B4E90BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{571558E1-E1FC-4959-B9A5-0B513B4E90BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{571558E1-E1FC-4959-B9A5-0B513B4E90BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17129268-9AE3-48A0-B7A9-F39C5448FA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17129268-9AE3-48A0-B7A9-F39C5448FA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17129268-9AE3-48A0-B7A9-F39C5448FA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17129268-9AE3-48A0-B7A9-F39C5448FA1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B6AF6C6-5B62-4429-BF35-7AD48E951E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B6AF6C6-5B62-4429-BF35-7AD48E951E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B6AF6C6-5B62-4429-BF35-7AD48E951E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B6AF6C6-5B62-4429-BF35-7AD48E951E95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +88,8 @@ Global
 		{67FA9CEC-0FA8-4AC2-955C-D47BA5DE87CE} = {52C01D8D-C752-44DA-B546-D1690BBF2F35}
 		{7EEE798E-4DD1-4A9F-9116-D241FD9CEAAF} = {837E973E-7E00-435A-A1BF-60592ABC2E07}
 		{571558E1-E1FC-4959-B9A5-0B513B4E90BB} = {52C01D8D-C752-44DA-B546-D1690BBF2F35}
+		{17129268-9AE3-48A0-B7A9-F39C5448FA1C} = {52C01D8D-C752-44DA-B546-D1690BBF2F35}
+		{3B6AF6C6-5B62-4429-BF35-7AD48E951E95} = {52C01D8D-C752-44DA-B546-D1690BBF2F35}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53475882-94A8-4DBC-8478-05E6A1E07E13}

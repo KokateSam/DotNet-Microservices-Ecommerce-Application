@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <hr />
-                        @foreach (var cartObj in Model.CartDetails)
+                        @foreach(var cartObj in Model.CartDetails)
                         {
                             <div class="row h-100">
                                 <div class="col-6">
@@ -63,22 +63,24 @@
 
                                 <div class="col-3" style="font-size:11px;">
                                     <span style="font-size:17px;">@cartObj.product.Price.ToString("c")</span>
-
                                 </div>
                                 <div class="col-3" style="font-size:11px;">
                                     <span style="font-size:17px;">@cartObj.product.Count</span>
                                 </div>
                             </div>
                             <hr />
-
+                        }
                             <div class="row">
                                 <div class="col-12 text-center pr-4 text-danger">
                                     Order Total : @string.Format("{0:c}",Model.CartHeader.CartTotal)<br />
-                                    <span class="text-success"> Order Discount : @string.Format("{0:c}", Model.CartHeader.Discount)</span>
+
+                                    @if (Model.CartHeader.Discount > 0)
+                                    {
+                                        <span class="text-success"> Order Discount : @string.Format("{0:c}", Model.CartHeader.Discount)</span>
+                                    }   
                                 </div>
-                            </div>
-                            
-                        }
+                            </div>  
+                        
                     </div>
                     <div class="card-footer">
                         <div class="row">

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
@@ -57,6 +58,9 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 _responce.Result = _mapper.Map<CouponDto>(couponlist);
 
+                
+
+
             }
             catch (Exception ex)
             {
@@ -105,6 +109,38 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 _dbcontext.Coupons.Add(couponObj);
                 _dbcontext.SaveChanges();
+
+                //Create a coupon in Stripe
+                try
+                {
+                    
+                    var options = new Stripe.CouponCreateOptions
+                    {
+                        AmountOff = (long)(obj.DiscountAmount * 100), // Convert to cents
+                        Name = obj.CouponCode,
+                        Currency = "usd",
+                        Id = obj.CouponCode,
+                    };
+                    var service = new Stripe.CouponService();
+                    var coupon = service.Create(options);
+                    /*
+                    Console.WriteLine($"Coupon Created: {coupon.Id}");
+
+                    
+                    var service1 = new Stripe.CouponService();
+
+                    var coupon1 = service.Get(obj.CouponCode);
+                    */
+
+
+                } catch (Stripe.StripeException ex)
+                {
+                    Console.WriteLine($"Stripe Error: {ex.Message}");
+                    Console.WriteLine($"Error Code: {ex.StripeError?.Code}");
+                }
+
+                //End of Stripe coupon creation
+
                 _responce.Result = _mapper.Map<CouponDto>(couponObj);
 
             }
@@ -112,10 +148,8 @@ namespace Mango.Services.CouponAPI.Controllers
             {
                 _responce.IsSuccess = false;
                 _responce.Message = ex.Message;
-
             }
             return _responce;
-
         }
 
         [HttpPut]
@@ -152,6 +186,10 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 _dbcontext.Coupons.Remove(obj);
                 _dbcontext.SaveChanges();
+
+                var service = new Stripe.CouponService();
+                service.Delete(obj.CouponCode);
+
             }
             catch (Exception ex)
             {

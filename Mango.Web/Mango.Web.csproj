@@ -9,7 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Stripe.net" Version="53.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
 </Project>
