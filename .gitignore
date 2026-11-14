@@ -24,6 +24,7 @@ artifacts/
 secrets.json
 appsettings.Local.json
 appsettings.*.Local.json
+**/appsettings.Development.json
 
 # Angular / Node.js generated files
 node_modules/
