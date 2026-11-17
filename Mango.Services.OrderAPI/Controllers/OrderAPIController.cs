@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Stripe;
 using Stripe.Checkout;
 
@@ -39,7 +40,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetOrders")]
+        [HttpGet("GetOrders/{userId}")]
         public ResponceDto? Get(string? userId = "")
         { 
             try
@@ -51,10 +52,9 @@ namespace Mango.Services.OrderAPI.Controllers
                 }
                 else
                 {
-                    objList = _dbcontext.OrderHeaders.Include(u => u.OrderDetails).Where(u => u.UserId == userId).OrderByDescending(u => u.OrderHeaderId);
+                    objList = _dbcontext.OrderHeaders.Include(u => u.OrderDetails).Where(u => u.UserId == userId).OrderByDescending(u => u.OrderHeaderId).ToList();
                 }
-
-                _response.Result = _mapper.Map<OrderHeaderDto>(objList);
+                _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
 
             }catch(Exception ex)
             {
@@ -70,7 +70,7 @@ namespace Mango.Services.OrderAPI.Controllers
         {
             try
             {
-                 OrderHeader orderHeader = _dbcontext.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
+                OrderHeader orderHeader = _dbcontext.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
             }
             catch (Exception ex)
@@ -124,15 +124,7 @@ namespace Mango.Services.OrderAPI.Controllers
                     LineItems = new List<SessionLineItemOptions>(), 
                     Mode = "payment"
                 };
-                // Create a list to hold discount options
-                var discountObj =new List <SessionDiscountOptions>()
-                {
-                    new SessionDiscountOptions
-                    {
-                        Coupon = stripeRequestDto.OrderHeader.CouponCode
-                    }
-
-                };
+                
                 // Add line items for each order detail
                 foreach (var item in stripeRequestDto.OrderHeader.OrderDetails)
                 {
@@ -152,6 +144,15 @@ namespace Mango.Services.OrderAPI.Controllers
                     };
                     options.LineItems.Add(SessionLineItem);
                 }
+                // Create a list to hold discount options
+                var discountObj = new List<SessionDiscountOptions>()
+                {
+                    new SessionDiscountOptions
+                    {
+                        Coupon = stripeRequestDto.OrderHeader.CouponCode
+                    }
+
+                };
 
                 // Apply discount if available
                 if (stripeRequestDto.OrderHeader.Discount > 0)
@@ -225,5 +226,44 @@ namespace Mango.Services.OrderAPI.Controllers
             }
             return _response;
         }
+
+        [Authorize]
+        [HttpPost("UpdateOrderStatus/{orderId:int}")]
+        public async Task<ResponceDto> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
+        {
+            try
+            {
+                OrderHeader orderHeader = _dbcontext.OrderHeaders.First(u => u.OrderHeaderId == orderId);
+                if (orderHeader !=null)
+                {
+                    if (newStatus == SD.Status_Cancelled)
+                    {
+                        //we will give refund
+                        var option = new RefundCreateOptions
+                        {
+                            Reason=RefundReasons.RequestedByCustomer,
+                            PaymentIntent=orderHeader.PaymentIntentId
+                        };
+
+                        var service = new RefundService();
+                        Refund refund = service.Create(option);
+                    }
+
+                    orderHeader.Status = newStatus;
+                    _dbcontext.SaveChanges();   
+                }
+
+
+            }
+            catch (Exception ex)
+            { 
+                _response.IsSuccess = false;
+                
+            }
+
+            return _response;
+
+        }
+
     }
 }

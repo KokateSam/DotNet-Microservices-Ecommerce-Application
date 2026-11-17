@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Mango.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-3.1.5/datatables.min.css" />
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
    
@@ -46,7 +47,9 @@
                                 &nbsp;<i class="bi bi-cart"></i> &nbsp;
                               </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Order" asp-action="OrderIndex" >Manage Orders</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
@@ -93,7 +96,8 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="//cdn.datatables.net/v/dt/dt-3.1.5/datatables.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

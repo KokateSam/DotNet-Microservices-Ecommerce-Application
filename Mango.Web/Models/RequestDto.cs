@@ -1,4 +1,5 @@
-﻿using static Mango.Web.Utility.SD;
+﻿
+using static Mango.Web.Utility.SD;
 
 namespace Mango.Web.Models
 {
@@ -8,5 +9,7 @@ namespace Mango.Web.Models
         public string  Url { get; set; }="";
         public Object ? Data { get; set; }=null;
         public string AccessToken { get; set; }
+
+        public ContentType ContentType { get; set; } = ContentType.Json;
     }
 }

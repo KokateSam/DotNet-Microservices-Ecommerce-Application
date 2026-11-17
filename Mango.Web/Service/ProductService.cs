@@ -34,7 +34,9 @@ namespace Mango.Web.Service
             return await _baseService.SendAsync(new RequestDto{
                 ApiType = SD.ApiType.POST,
                 Url=SD.ProductAPIBase + "/api/product",
-                Data=productDto
+                Data=productDto,
+
+                ContentType=SD.ContentType.MultipartFormData
             });
         }
         public async Task<ResponceDto?> UpdateProductAsync(ProductDto productDto)
@@ -43,7 +45,9 @@ namespace Mango.Web.Service
             {
                 ApiType = SD.ApiType.PUT,
                 Url = SD.ProductAPIBase + "/api/product",
-                Data = productDto
+                Data = productDto,
+
+                ContentType=SD.ContentType.MultipartFormData
             });
         }
         public async Task<ResponceDto?> DeleteProductAsync(int ProductId)
