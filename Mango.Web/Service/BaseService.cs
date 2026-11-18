@@ -27,13 +27,13 @@ namespace Mango.Web.Service
 
                 HttpRequestMessage message = new();
                 //message.Headers.Add("Accept", "application/json");
+
                 if (requestDto.ContentType == ContentType.MultipartFormData)
                 {
                     message.Headers.Add("Accept", "*/*");
                 }
                 else {
                     message.Headers.Add("Accept", "application/json");
-                
                 }
 
                 //token
@@ -46,6 +46,8 @@ namespace Mango.Web.Service
 
 
                 message.RequestUri = new Uri(requestDto.Url);
+
+                //file or image upload logic
 
                 if (requestDto.ContentType == ContentType.MultipartFormData)
                 {
@@ -79,10 +81,6 @@ namespace Mango.Web.Service
                         message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
                     }
                 }
-
-
-
-                
 
                 HttpResponseMessage? responseMessage = null;
 

@@ -95,6 +95,7 @@ namespace Mango.Services.ProductAPI.Controllers
                         
                         }
 
+
                         var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                         product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
                         product.ImageLocalPath = filePath;
@@ -121,31 +122,59 @@ namespace Mango.Services.ProductAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles ="ADMIN")]
-        public ResponceDto PUT([FromBody] ProductDto obj)
+        public ResponceDto PUT( ProductDto productDto)
         {
             try
             {
-                if (obj == null)
+                if (productDto == null)
                 {
                     _responce.IsSuccess = false;
                     _responce.Message = "Invalid data";
                 }
                 else
                 {
-                    /*
-                    var productid = obj.ProductId;
-                    Product existignProduct = _dbcontext.Products.FirstOrDefault(p=>p.ProductId==productid);
+                    Product product = _mapper.Map<Product>(productDto);
+                    if (productDto.Image != null)
+                    {
+                        //delete previous file in  ProductAPI solution ProductImage folder also when product is deleted
+                        if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                        {
+                            var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
 
-                    existignProduct.Name = obj.Name;
-                    existignProduct.Price = obj.Price;
-                    existignProduct.Description = obj.Description;
-                    existignProduct.CategoryName = obj.CategoryName;
-                    */
-                    Product productObj = _mapper.Map<Product>(obj);
-                    _dbcontext.Products.Update(productObj);
+                            FileInfo file = new FileInfo(oldFilePathDirectory);
+
+                            if (file.Exists)
+                            {
+                                file.Delete();
+                            }
+                        }
+
+                        //Add new file for update file
+
+                        string fileName = product.ProductId + Path.GetExtension(productDto.Image.FileName);
+                        string filePath = @"wwwroot\ProductImages\" + fileName;
+                        var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                        using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                        {
+                            productDto.Image.CopyTo(fileStream);
+                        }
+
+                        var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                        product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
+                        product.ImageLocalPath = filePath;
+
+                    }
+
+
+
+
+
+
+
+                    _dbcontext.Products.Update(product);
                     _dbcontext.SaveChanges();
 
-                    _responce.Result=_mapper.Map<ProductDto>(productObj);
+                    _responce.Result=_mapper.Map<ProductDto>(product);
 
                 }
 
